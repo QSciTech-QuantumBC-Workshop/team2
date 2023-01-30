@@ -294,15 +294,14 @@ class PauliString:
             np.array<bool>: True where both z_bits and x_bits are False.
         """
 
-        ids = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
-
-        raise NotImplementedError()
-
+        ids = np.array([0] * len(self), dtype=bool)
+        
+        ii=len(self)-1
+        for char in str(self):
+            if char == 'I':
+                ids[ii] = 1
+            ii=ii-1
+        
         return ids
 
     def copy(self) -> 'PauliString':
