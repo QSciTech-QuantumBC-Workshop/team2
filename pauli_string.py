@@ -148,7 +148,7 @@ class PauliString:
         z_bits = np.array([0] * len_str, dtype=bool)
         x_bits = np.array([0] * len_str, dtype=bool)
         
-        ii=3
+        ii=len_str-1
         for char in pauli_str:
             if char == 'I' or char == 'X':
                 z_bits[ii] = 0
@@ -156,7 +156,7 @@ class PauliString:
                 z_bits[ii] = 1
             ii = ii-1
 
-        ii=3
+        ii=len_str-1
         for char in pauli_str:
             if char == 'I' or char == 'Z':
                 x_bits[ii] = 0
@@ -174,16 +174,28 @@ class PauliString:
         Returns:
             np.array<bool>: zx_bits representation of the PauliString of length 2n
         """
-
-        zx_bits = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
+        pauli_str = str(self)
         
-        raise NotImplementedError()
+        z_bits = np.array([0] * len(self), dtype=bool)
+        x_bits = np.array([0] * len(self), dtype=bool)
+        
+        ii=len(self)-1
+        for char in pauli_str:
+            if char == 'I' or char == 'X':
+                z_bits[ii] = 0
+            else:
+                z_bits[ii] = 1
+            ii = ii-1
 
+        ii=len(self)-1
+        for char in pauli_str:
+            if char == 'I' or char == 'Z':
+                x_bits[ii] = 0
+            else:
+                x_bits[ii] = 1
+            ii = ii-1
+            
+        zx_bits = np.concatenate((z_bits, x_bits), axis=None)
         return zx_bits
 
     def to_xz_bits(self) -> NDArray[np.bool_]:
@@ -194,14 +206,28 @@ class PauliString:
         Returns:
             np.array<bool>: xz_bits representation of the PauliString of length 2n
         """
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
+        pauli_str = str(self)
         
-        raise NotImplementedError()
+        z_bits = np.array([0] * len(self), dtype=bool)
+        x_bits = np.array([0] * len(self), dtype=bool)
+        
+        ii=len(self)-1
+        for char in pauli_str:
+            if char == 'I' or char == 'X':
+                z_bits[ii] = 0
+            else:
+                z_bits[ii] = 1
+            ii = ii-1
 
+        ii=len(self)-1
+        for char in pauli_str:
+            if char == 'I' or char == 'Z':
+                x_bits[ii] = 0
+            else:
+                x_bits[ii] = 1
+            ii = ii-1
+            
+        xz_bits = np.concatenate((x_bits, z_bits), axis=None)
         return xz_bits
 
     def mul_pauli_string(self, other: 'PauliString') -> 'PauliString':
