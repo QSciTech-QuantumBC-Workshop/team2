@@ -84,7 +84,7 @@ class PauliString:
             or
             LinearCombinaisonPauliString : When other is numeric
         """
-
+        print(isinstance(other, PauliString))
         if isinstance(other, PauliString):
             return self.mul_pauli_string(other)
         else:
@@ -120,17 +120,10 @@ class PauliString:
             PauliString: The Pauli string specified by the 'zx_bits'.
         """
 
-        z_bits = x_bits = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # z_bits = 
-        # x_bits = 
-        ################################################################################################################
+        temp=np.split(zx_bits,2)
+        z_bits = temp[0]
+        x_bits = temp[1]
         
-        raise NotImplementedError()
-
         return cls(z_bits, x_bits)
 
     @classmethod
@@ -246,20 +239,46 @@ class PauliString:
         
         if len(self) != len(other):
             raise ValueError('PauliString must be of the same length')
-
-        new_z_bits = new_x_bits = phase = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # new_z_bits = 
-        # new_x_bits = 
-        # w = 
-        # phase = (-1j)**w
-        ################################################################################################################
         
-        raise NotImplementedError()
+        pauli_string_1 = str(self)
+        pauli_string_2 = str(other)
+        zx_bits_A = PauliString.to_zx_bits(self)
+        zx_bits_B = PauliString.to_zx_bits(other)
         
+        temp_A=np.split(zx_bits_A,2)
+        z_bits_A = temp_A[0]
+        x_bits_A = temp_A[1]
+        
+        temp_B=np.split(zx_bits_B,2)
+        z_bits_B = temp_B[0]
+        x_bits_B = temp_B[1]
+        
+        new_z_bits = np.logical_xor(z_bits_A,z_bits_B)
+        new_x_bits = np.logical_xor(x_bits_A,x_bits_B)
+        
+        w = 0
+        for jj in enumerate(pauli_string_1):
+            ii = jj[0]
+            print(jj[0])
+            if pauli_string_1[ii] == 'Y':
+                if pauli_string_2[ii] == 'X':
+                    w=w+1
+                if pauli_string_2[ii] == 'Z':
+                    w=w-1
+            if pauli_string_1[ii] == 'Z':
+                if pauli_string_2[ii] == 'Y':
+                    w=w+1
+                if pauli_string_2[ii] == 'X':
+                    w=w-1
+            if pauli_string_1[ii] == 'X':
+                if pauli_string_2[ii] == 'Z':
+                    w=w+1
+                if pauli_string_2[ii] == 'Y':
+                    w=w-1
+        print(w)
+        phase = (-1j)**w
+        
+     
         return self.__class__(new_z_bits, new_x_bits), phase
 
     def mul_coef(self, coef: Union[int, float, complex]) -> 'LinearCombinaisonPauliString':
