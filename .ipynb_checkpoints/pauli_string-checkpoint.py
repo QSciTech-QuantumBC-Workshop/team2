@@ -73,7 +73,7 @@ class PauliString:
                                                                                  'LinearCombinaisonPauliString']:
         """
         Allow the use of '*' with other PauliString or with a coef (numeric).
-        NOTE:
+        NOTE: If this isn't working, restart the kernel.
         Args:
             other (PauliString): Will compute the product 
             or
@@ -290,16 +290,8 @@ class PauliString:
             LinearCombinaisonPauliString: A LCPS with only one PauliString and coef.
         """
 
-        coefs = pauli_strings = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # coefs = 
-        # pauli_strings =
-        ################################################################################################################
-
-        raise NotImplementedError()
+        coefs = np.array([coef],dtype = complex) 
+        pauli_strings = np.array([self],dtype = PauliString)
 
         return LinearCombinaisonPauliString(coefs, pauli_strings)
 
@@ -540,13 +532,17 @@ class LinearCombinaisonPauliString:
         new_coefs = np.zeros((len(self)*len(other),), dtype=np.complex128)
         new_pauli_strings = np.zeros((len(self)*len(other),), dtype=PauliString)
         
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
-        
-        raise NotImplementedError()
-
+        kk=0
+        ii=0
+        jj=0
+        for char in self.coefs:
+            for char in other.coefs:
+                new_pauli_strings[kk],phase = PauliString.mul_pauli_string(self.pauli_strings[ii], other.pauli_strings[jj])
+                new_coefs[kk] = self.coefs[ii] * other.coefs[jj] * phase
+                kk=kk+1
+                jj=jj+1
+            ii=ii+1    
+            
         return self.__class__(new_coefs, new_pauli_strings)
 
     def mul_coef(self, other: 'LinearCombinaisonPauliString') -> 'LinearCombinaisonPauliString':
