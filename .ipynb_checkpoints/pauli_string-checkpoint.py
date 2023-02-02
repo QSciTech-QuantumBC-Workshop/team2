@@ -581,13 +581,33 @@ class LinearCombinaisonPauliString:
         """
 
         zx_bits = np.zeros((len(self), 2*self.n_qubits), dtype=np.bool_)
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
         
-        raise NotImplementedError()
+        kk=0
+        for val in self.pauli_strings:
+            
+            pauli_str = str(self.pauli_strings[kk])
+
+            z_bits = np.array([0] * len(self.pauli_strings[kk]), dtype=bool)
+            x_bits = np.array([0] * len(self.pauli_strings[kk]), dtype=bool)
+
+            ii=len(self.pauli_strings[kk])-1
+            for char in pauli_str:
+                if char == 'I' or char == 'X':
+                    z_bits[ii] = 0
+                else:
+                    z_bits[ii] = 1
+                ii = ii-1
+
+            ii=len(self.pauli_strings[kk])-1
+            for char in pauli_str:
+                if char == 'I' or char == 'Z':
+                    x_bits[ii] = 0
+                else:
+                    x_bits[ii] = 1
+                ii = ii-1
+
+            zx_bits[kk] = np.concatenate((z_bits, x_bits), axis=None) 
+            kk=kk+1
         
         return zx_bits
 
@@ -601,13 +621,33 @@ class LinearCombinaisonPauliString:
 
         xz_bits = np.zeros((len(self), 2*self.n_qubits), dtype=np.bool_)
 
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
-        
-        raise NotImplementedError()
+        kk=0
+        for val in self.pauli_strings:
+            
+            pauli_str = str(self.pauli_strings[kk])
 
+            z_bits = np.array([0] * len(self.pauli_strings[kk]), dtype=bool)
+            x_bits = np.array([0] * len(self.pauli_strings[kk]), dtype=bool)
+
+            ii=len(self.pauli_strings[kk])-1
+            for char in pauli_str:
+                if char == 'I' or char == 'X':
+                    z_bits[ii] = 0
+                else:
+                    z_bits[ii] = 1
+                ii = ii-1
+
+            ii=len(self.pauli_strings[kk])-1
+            for char in pauli_str:
+                if char == 'I' or char == 'Z':
+                    x_bits[ii] = 0
+                else:
+                    x_bits[ii] = 1
+                ii = ii-1
+
+            xz_bits[kk] = np.concatenate((x_bits, z_bits), axis=None) 
+            kk=kk+1
+        
         return xz_bits
 
     def ids(self) -> NDArray[np.bool_]:
@@ -620,13 +660,15 @@ class LinearCombinaisonPauliString:
 
         ids = np.zeros((len(self), self.n_qubits), dtype=np.bool_)
 
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
-        
-        raise NotImplementedError()
-
+        kk=0
+        for val in self.pauli_strings:
+            ii=len(self.pauli_strings[kk])-1
+            for char in str(self.pauli_strings[kk]):
+                if char == 'I':
+                    ids[kk,ii] = 1
+                ii=ii-1
+            kk=kk+1
+            
         return ids
 
     def combine(self) -> 'LinearCombinaisonPauliString':
