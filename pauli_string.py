@@ -293,13 +293,11 @@ class PauliString:
         coefs = pauli_strings = None
 
         ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # coefs = 
-        # pauli_strings =
+        coefs = np.array([coef],dtype = complex)
+        pauli_strings = np.array([self],dtype = PauliString)
         ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return LinearCombinaisonPauliString(coefs, pauli_strings)
 
@@ -505,14 +503,12 @@ class LinearCombinaisonPauliString:
         new_coefs = new_pauli_strings = None
 
         ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # Hints : use np.concatenate
-        # new_coefs = 
-        # new_pauli_strings = 
+        #new_coefs = np.concatenate(self.coefs, other.coefs)
+        new_coefs = np.concatenate((self.coefs, other.coefs))
+        new_pauli_strings = np.concatenate((self.pauli_strings, other.pauli_strings))
         ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return self.__class__(new_coefs, new_pauli_strings)
 
