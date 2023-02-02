@@ -73,7 +73,7 @@ class PauliString:
                                                                                  'LinearCombinaisonPauliString']:
         """
         Allow the use of '*' with other PauliString or with a coef (numeric).
-
+        NOTE:
         Args:
             other (PauliString): Will compute the product 
             or
@@ -84,7 +84,7 @@ class PauliString:
             or
             LinearCombinaisonPauliString : When other is numeric
         """
-        print(isinstance(other, PauliString))
+        print(type(other))
         if isinstance(other, PauliString):
             return self.mul_pauli_string(other)
         else:
@@ -259,7 +259,6 @@ class PauliString:
         w = 0
         for jj in enumerate(pauli_string_1):
             ii = jj[0]
-            print(jj[0])
             if pauli_string_1[ii] == 'Y':
                 if pauli_string_2[ii] == 'X':
                     w=w+1
@@ -275,7 +274,6 @@ class PauliString:
                     w=w+1
                 if pauli_string_2[ii] == 'Y':
                     w=w-1
-        print(w)
         phase = (-1j)**w
         
      
@@ -450,7 +448,8 @@ class LinearCombinaisonPauliString:
     def __mul__(self, other: 'LinearCombinaisonPauliString') -> 'LinearCombinaisonPauliString':
         """
         Allow the use of * with other LCPS or numeric value(s)
-
+        NOTE: If this isn't working, restart the kernel.
+        
         Args:
             other (LinearCombinaisonPauliString): An other LCPS
 
