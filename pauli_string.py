@@ -337,16 +337,22 @@ class PauliString:
         Z_MAT = np.array([[1, 0], [0, -1]])
 
         matrix = None
+        matrix = np.ones((1,1),dtype = np.complex128)
+        x = self.x_bits
+        z = self.z_bits
 
-        ################################################################################################################
-        # YOUR CODE HERE (OPTIONAL)
-        # TO COMPLETE (after lecture on mapping)
-        # Hints : start with
-        # matrix = np.ones((1,1),dtype = np.complex128)
-        # And then use the np.kron() method to build the matrix
-        ################################################################################################################
+        i = len(x)-1
 
-        raise NotImplementedError()
+        for ii in range(len(x)):
+            if x[i] & z[i]:
+                matrix = np.kron(matrix, Y_MAT)
+            elif x[i] & ~z[i]:
+                matrix = np.kron(matrix, X_MAT)
+            elif ~x[i] & z[i]:
+                matrix = np.kron(matrix, Z_MAT)
+            elif ~x[i] & ~z[i]:
+                matrix = np.kron(matrix, I_MAT)  
+            i = i-1
         
         return matrix
 
