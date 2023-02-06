@@ -84,7 +84,6 @@ class PauliString:
             or
             LinearCombinaisonPauliString : When other is numeric
         """
-        print(type(other))
         if isinstance(other, PauliString):
             return self.mul_pauli_string(other)
         else:
@@ -532,14 +531,14 @@ class LinearCombinaisonPauliString:
         
         kk=0
         ii=0
-        jj=0
-        for char in self.coefs:
-            for char in other.coefs:
+        for char1 in self.coefs:
+            jj=0
+            for char2 in other.coefs:
                 new_pauli_strings[kk],phase = PauliString.mul_pauli_string(self.pauli_strings[ii], other.pauli_strings[jj])
                 new_coefs[kk] = self.coefs[ii] * other.coefs[jj] * phase
                 kk=kk+1
                 jj=jj+1
-            ii=ii+1    
+            ii=ii+1
             
         return self.__class__(new_coefs, new_pauli_strings)
 
@@ -678,16 +677,26 @@ class LinearCombinaisonPauliString:
             LinearCombinaisonPauliString: LCPS with combined coefficients.
         """
 
-        new_coefs = new_pauli_strings = None
+        
 
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on mapping)
         # hint : make use to_zx_bits and np.unique
-        ################################################################################################################
+        LCPS_zx_bits = self.to_zx_bits()
+        new_LCPS_zx_bits, counts = np.unique(LCPS_zx_bits, return_counts=True,axis=0)
         
-        raise NotImplementedError()
-
+        new_coefs = np.zeros(len(counts), dtype=np.complex128)
+        new_pauli_strings = np.zeros(len(counts), dtype=PauliString)
+        
+        for step, val in enumerate(counts):
+            for stepp, value in enumerate(self.coefs):
+                if (new_LCPS_zx_bits[step,:]==LCPS_zx_bits[stepp,:]).all():
+                    new_coefs[step] = new_coefs[step] + value
+        
+        for step, val in enumerate(new_LCPS_zx_bits):
+            new_pauli_strings[step] = PauliString.from_zx_bits(val)
+        ##########################
         return self.__class__(new_coefs, new_pauli_strings)
 
     def apply_threshold(self, threshold: float = 1e-6) -> 'LinearCombinaisonPauliString':
@@ -708,9 +717,24 @@ class LinearCombinaisonPauliString:
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on mapping)
         # Hint : create a np.array<bool> and use this array to get the subset of the lcps where this array is True
+        checker = np.zeros(len(self.coefs),dtype=bool)
+        kk=0
+        for step,val in enumerate(self.coefs):
+            if threshold < val:
+                checker[step] = True
+                
+        new_length = np.count_nonzero(checker == True)
+        new_coefs = np.zeros(new_length, dtype=np.complex128)
+        new_pauli_strings = np.zeros(new_length, dtype=PauliString)
+        
+        kk = 0
+        for step,val in enumerate(checker):
+            if val == True:
+                new_coefs[kk] = self.coefs[step]
+                new_pauli_strings[kk] = self.pauli_strings[step]
         ################################################################################################################
-
-        raise NotImplementedError()
+        
+        #raise NotImplementedError()
 
         return self.__class__(new_coefs, new_pauli_strings)
 
