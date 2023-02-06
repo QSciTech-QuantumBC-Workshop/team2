@@ -73,12 +73,32 @@ class JordanWigner(Mapping):
         annihilation_operators = list()
         
         ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # This is a large piece of the puzzle
+        # creation_operators = [.5*PauliString.from_str('IIIX') + -0.5j*PauliString.from_str('IIIY'),
+        #                       .5*PauliString.from_str('IIXZ') + -0.5j*PauliString.from_str('IIYZ'),
+        #                       .5*PauliString.from_str('IXZZ') + -0.5j*PauliString.from_str('IYZZ'),
+        #                       .5*PauliString.from_str('XZZZ') + -0.5j*PauliString.from_str('YZZZ')]
+        # annihilation_operators = [.5*PauliString.from_str('IIIX') + 0.5j*PauliString.from_str('IIIY'),
+        #                       .5*PauliString.from_str('IIXZ') + 0.5j*PauliString.from_str('IIYZ'),
+        #                       .5*PauliString.from_str('IXZZ') + 0.5j*PauliString.from_str('IYZZ'),
+        #                       .5*PauliString.from_str('XZZZ') + 0.5j*PauliString.from_str('YZZZ')]
+        
+        part1 = [[]*n_qubits]*n_qubits
+        part2 = [[]*n_qubits]*n_qubits
+    
+        for i in range(n_qubits):
+            part1[i] = 'X' 
+            part2[i] = 'Y'
+        for i in range(n_qubits):    
+            for j in range(n_qubits):
+                if j>i:
+                    part1[j] = part1[j] + 'Z'
+                    part2[j] = part2[j] + 'Z'
+            
+        creation_operators = [.5*PauliString.from_str(part1[i]) + .5j*PauliString.from_str(part2[i]) for i in range(n_qubits)] 
+        annihilation_operators = [.5*PauliString.from_str(part1[i]) + -.5j*PauliString.from_str(part2[i]) for i in range(n_qubits)]
+        
+        
         ################################################################################################################
-
-        raise NotImplementedError()
 
         return creation_operators, annihilation_operators
 
