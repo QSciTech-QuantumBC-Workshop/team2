@@ -93,9 +93,12 @@ class JordanWigner(Mapping):
                 if j>i:
                     part1[j] = part1[j] + 'Z'
                     part2[j] = part2[j] + 'Z'
+                elif j<i: 
+                    part1[j] = 'I' + part1[j] 
+                    part2[j] = 'I' + part2[j]
             
-        creation_operators = [.5*PauliString.from_str(part1[i]) + .5j*PauliString.from_str(part2[i]) for i in range(n_qubits)] 
-        annihilation_operators = [.5*PauliString.from_str(part1[i]) + -.5j*PauliString.from_str(part2[i]) for i in range(n_qubits)]
+        creation_operators = [.5*PauliString.from_str(part1[i]) + -.5j*PauliString.from_str(part2[i]) for i in range(n_qubits)] 
+        annihilation_operators = [.5*PauliString.from_str(part1[i]) + .5j*PauliString.from_str(part2[i]) for i in range(n_qubits)]
         
         
         ################################################################################################################
