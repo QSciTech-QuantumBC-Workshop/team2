@@ -776,15 +776,21 @@ class LinearCombinaisonPauliString:
         """
 
         order = None
+        
+        zx = self.to_zx_bits()
+        val = []
 
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # order = 
-        ################################################################################################################
-
-        raise NotImplementedError()
-
+        for item1 in zx:
+            n = 0
+            valu = 0
+            for item2 in item1:
+                if item2 == False:
+                    valu = valu + 2**n
+                n = n+1
+            val.append(valu)
+        
+        order = list(np.argsort(val))
+        
         new_coefs = self.coefs[order]
         new_pauli_strings = self.pauli_strings[order]
 
