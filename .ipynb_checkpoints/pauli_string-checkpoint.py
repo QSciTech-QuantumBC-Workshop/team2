@@ -336,16 +336,22 @@ class PauliString:
         Z_MAT = np.array([[1, 0], [0, -1]])
 
         matrix = None
+        matrix = np.ones((1,1),dtype = np.complex128)
+        x = self.x_bits
+        z = self.z_bits
 
-        ################################################################################################################
-        # YOUR CODE HERE (OPTIONAL)
-        # TO COMPLETE (after lecture on mapping)
-        # Hints : start with
-        # matrix = np.ones((1,1),dtype = np.complex128)
-        # And then use the np.kron() method to build the matrix
-        ################################################################################################################
+        i = len(x)-1
 
-        raise NotImplementedError()
+        for ii in range(len(x)):
+            if x[i] & z[i]:
+                matrix = np.kron(matrix, Y_MAT)
+            elif x[i] & ~z[i]:
+                matrix = np.kron(matrix, X_MAT)
+            elif ~x[i] & z[i]:
+                matrix = np.kron(matrix, Z_MAT)
+            elif ~x[i] & ~z[i]:
+                matrix = np.kron(matrix, I_MAT)  
+            i = i-1
         
         return matrix
 
@@ -720,9 +726,9 @@ class LinearCombinaisonPauliString:
         checker = np.zeros(len(self.coefs),dtype=bool)
         kk=0
         for step,val in enumerate(self.coefs):
-            if threshold < val:
+            if threshold < abs(val):
                 checker[step] = True
-                
+
         new_length = np.count_nonzero(checker == True)
         new_coefs = np.zeros(new_length, dtype=np.complex128)
         new_pauli_strings = np.zeros(new_length, dtype=PauliString)
@@ -732,11 +738,11 @@ class LinearCombinaisonPauliString:
             if val == True:
                 new_coefs[kk] = self.coefs[step]
                 new_pauli_strings[kk] = self.pauli_strings[step]
+                kk=kk+1
         ################################################################################################################
-        
         #raise NotImplementedError()
 
-        return self.__class__(new_coefs, new_pauli_strings)
+        return self.__class__(new_coefs,new_pauli_strings)
 
     def divide_in_bitwise_commuting_cliques(self) -> list['LinearCombinaisonPauliString']:
         """
