@@ -298,16 +298,22 @@ class BasicEstimator(Estimator):
             list<list of QuantumCircuit> : The diagonalizing quantum circuits
         """
         
-        diagonal_observables = list()
-        diagonalizing_circuits = list()
+        n_strings = len(observable.coefs)
+        diagonal_observables = [[]*n_strings]*n_strings
+        diagonal_pauli_string = [[]*n_strings]*n_strings
+        diagonalizing_circuits = [[]*n_strings]*n_strings
         
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
         # Hint : the next method does the work for 1 PauliString + coef
+        print(enumerate(observable.coefs))
+        for ii, val in enumerate(observable.coefs):
+            diagonalizing_circuits[ii], diagonal_pauli_string[ii] = Estimator.diagonalizing_pauli_string_circuit(observable.pauli_strings[ii])
+            diagonal_observables[ii] = observable.coefs[ii] * diagonal_pauli_string[ii]
         ################################################################################################################
         
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return diagonal_observables, diagonalizing_circuits
 
