@@ -264,18 +264,45 @@ class TwoBodyFermionicHamiltonian(FermionicHamiltonian):
         # and we compute ap * ap * am * am there will be (2*n_orbs)**4 Coefs and PauliStrings
         new_coefs = np.zeros(((2*n_orbs)**4,), dtype=np.complex128)
         new_pauli_strings = np.zeros(((2*n_orbs)**4,), dtype=PauliString)
+        
+        new_phase = np.zeros(((2*n_orbs)**4,), dtype=np.complex128)
 
         lcps = None
 
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        # lcps =
-        ################################################################################################################
+        i = 0 
+        for ii, cre in enumerate(creation_operators):
+            for jj, cre1 in enumerate(creation_operators):
+                for kk, ann in enumerate(annihilation_operators):
+                    for ll, ann1 in enumerate(annihilation_operators):
+                        for st1 in cre.pauli_strings:
+                            for st2 in cre1.pauli_strings:
+                                for st3 in ann.pauli_strings:
+                                    for st4 in ann1.pauli_strings:
+                                        paul1, phase1 = st1*st2
+                                        paul2, phase2 = st3*st4
+                                        paul3, phase3 = paul1*paul2
+                                        phase4 = phase1*phase2*phase3
+                                        new_phase[i] = phase4
+                                        new_pauli_strings[i] = paul3
+                                        i = i+1
+        
+        
+        i = 0
+        for ii, cre in enumerate(creation_operators):
+            for jj, cre1 in enumerate(creation_operators):
+                for kk, ann in enumerate(annihilation_operators):
+                    for ll, ann1 in enumerate(annihilation_operators):
+                        for co1 in cre.coefs:
+                            for co2 in cre1.coefs:
+                                for co3 in ann.coefs:
+                                    for co4 in ann1.coefs:
+                                        new_coefs[i] = .5*self.integrals[ii,jj, kk, ll]*co1*co2*co3*co4*new_phase[i]
+                                        i = i+1
 
-        raise NotImplementedError()
-
+        
+        lcps =  LinearCombinaisonPauliString(new_coefs, new_pauli_strings)
         return lcps
+        
         
 
 class MolecularFermionicHamiltonian(FermionicHamiltonian):
@@ -458,13 +485,21 @@ class MolecularFermionicHamiltonian(FermionicHamiltonian):
         """     
 
         out = None
-
-        ################################################################################################################
-        # YOUR CODE HERE
-        # TO COMPLETE (after lecture on mapping)
-        ################################################################################################################
-
-        raise NotImplementedError()
+        one_body_new = self.one_body.to_linear_combinaison_pauli_string(creation_operators, annihilation_operators)
+        
+        two_body_new = self.two_body.to_linear_combinaison_pauli_string(creation_operators, annihilation_operators)
+        
+        one_coef = one_body_new.coefs
+        two_coef = two_body_new.coefs
+        
+        new_coefs = np.concatenate((one_coef, two_coef))
+        
+        one_pauli = one_body_new.pauli_strings
+        two_pauli = two_body_new.pauli_strings
+        
+        new_pauli = np.concatenate((one_pauli, two_pauli))
+            
+        out = LinearCombinaisonPauliString(new_coefs, new_pauli)
 
         return out
 
