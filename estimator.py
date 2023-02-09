@@ -245,14 +245,31 @@ class Estimator:
         
         n_qubits = len(pauli_string)
         diagonalizing_circuit = QuantumCircuit(n_qubits)
-        diagonal_pauli_string = None
+        diagonal_pauli_string = ''
+        paulistr_temp = [[]*n_qubits]*n_qubits #stores the string that represents the diagonalized PauliString 
 
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
+        for ii in range(n_qubits):
+            rev = n_qubits-ii-1 # reversed index
+            char = str(pauli_string)[rev]
+            if char == 'X':
+                diagonalizing_circuit.h(ii)
+                paulistr_temp[rev] = 'Z'
+                
+            elif char == 'Y':
+                diagonalizing_circuit.sdg(ii)
+                diagonalizing_circuit.h(ii)
+                paulistr_temp[rev] = 'Z'
+            
+            else:
+                paulistr_temp[rev] = char
+                
+        diagonal_pauli_string = PauliString.from_str(paulistr_temp)
         ################################################################################################################
         
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
         return diagonalizing_circuit, diagonal_pauli_string
 
