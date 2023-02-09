@@ -24,6 +24,7 @@ import numpy as np
 
 from qiskit import QuantumCircuit, execute
 from qiskit.providers import Backend
+from qiskit.providers import JobStatus
 
 from pauli_string import PauliString, LinearCombinaisonPauliString
 
@@ -100,9 +101,19 @@ class Estimator:
         # B. Combine all the results into the expectation value of the observable (e.i. the energy)
         # (Optional) record the result with the record object
         # (Optional) monitor the time of execution
-        ################################################################################################################
+        n_circuits = len(circuits)
+        for ii,circuit in enumerate(circuits):
+            job = execute(circuit,self.backend)
+            while (job.status() != JobStatus.DONE):
+                a = 0
+            result = job.result()
+            counts = result.get_counts()
+            counts
+            expectation_value += Estimator.estimate_diagonal_observable_expectation_value(self.diagonal_observables[ii], counts)
+            
+    ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         eval_time = time.time()-t0
 
@@ -217,7 +228,6 @@ class Estimator:
         n_states = len(counts.items())
         basis_states = list(counts.keys())
         n_counts = list(counts.values())
-        print(n_counts)
         n_tot = sum(n_counts)
         
         for ii,state in enumerate(basis_states):
@@ -245,13 +255,15 @@ class Estimator:
         """
 
         expectation_value = 0
-
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
+        for ii,pauli_string in enumerate(diagonal_observable.pauli_strings):
+            paulistring_expectation_val = Estimator.estimate_diagonal_pauli_string_expectation_value(pauli_string,counts)
+            expectation_value = expectation_value + diagonal_observable.coefs[ii] * paulistring_expectation_val
         ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return expectation_value
 
