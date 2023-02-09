@@ -214,9 +214,19 @@ class Estimator:
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
+        n_states = len(counts.items())
+        basis_states = list(counts.keys())
+        n_counts = list(counts.values())
+        print(n_counts)
+        n_tot = sum(n_counts)
+        
+        for ii,state in enumerate(basis_states):
+            eigenvalue = Estimator.diagonal_pauli_string_eigenvalue(diagonal_pauli_string,state)
+            expectation_value = expectation_value + eigenvalue * n_counts[ii] / n_tot
+            
         ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return expectation_value
 
