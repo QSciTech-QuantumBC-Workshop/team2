@@ -159,9 +159,7 @@ class Estimator:
         """
 
         n_observables = len(self.diagonal_observables)
-        print(n_observables)
         n_qubits = len(self.diagonal_observables[0].pauli_strings[0])
-        print(n_qubits)
         circuits = [[]*n_observables]*n_observables
         ################################################################################################################
         # YOUR CODE HERE
@@ -344,7 +342,6 @@ class BasicEstimator(Estimator):
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
         # Hint : the next method does the work for 1 PauliString + coef
-        print(enumerate(observable.coefs))
         for ii, val in enumerate(observable.coefs):
             diagonalizing_circuits[ii], diagonal_pauli_string[ii] = Estimator.diagonalizing_pauli_string_circuit(observable.pauli_strings[ii])
             diagonal_observables[ii] = observable.coefs[ii] * diagonal_pauli_string[ii]
