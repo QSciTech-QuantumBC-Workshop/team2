@@ -179,14 +179,20 @@ class Estimator:
             float: The eigenvalue
         """
 
-        eigenvalue = 0
+        eigenvalue = 1
 
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
+        if len(diagonal_pauli_string) != len(state):
+            raise Error('number of qubits must be equal to length of the Pauli string')
+            
+        for ii, val in enumerate(state):
+            if val == '1' and str(diagonal_pauli_string)[ii] == 'Z':
+                eigenvalue = eigenvalue * -1
         ################################################################################################################
 
-        raise NotImplementedError()
+        # raise NotImplementedError()
 
         return eigenvalue
 
