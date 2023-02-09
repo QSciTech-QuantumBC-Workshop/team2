@@ -147,13 +147,22 @@ class Estimator:
             list<QuantumCircuit>: The quantum circuits to be executed.
         """
 
-        circuits = list()
+        n_observables = len(self.diagonal_observables)
+        print(n_observables)
+        n_qubits = len(self.diagonal_observables[0].pauli_strings[0])
+        print(n_qubits)
+        circuits = [[]*n_observables]*n_observables
         ################################################################################################################
         # YOUR CODE HERE
         # TO COMPLETE (after lecture on VQE)
+        meas = QuantumCircuit(n_qubits)
+        meas.measure_all()
+        for ii,val in enumerate(self.diagonal_observables):
+            circuits[ii] = state_circuit + self.diagonalizing_circuits[ii] + meas
+        
         ################################################################################################################
 
-        raise NotImplementedError()
+        #raise NotImplementedError()
 
         return circuits
 
